@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tlias智能学习辅助系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: #6b6a6a;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .navbar h1 {
+            margin: 0;
+            font-weight: bold;
+            color: white;
+            font-family: "kaiti";
+        }
+        
+        .logout-link {
+            text-decoration: none;
+            color: white;
+            font-weight: normal;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input[type="text"],
+        .form-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .form-group select {
+            height: 36px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #45a049;
+        }
+
+        .btn-secondary {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #b3b3b3;
+        }
+
+        .table-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            vertical-align: middle;
+        }
+
+        .gender {
+            color: #333;
+        }
+
+        .position {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .date {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .operation {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-edit {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            background-color: #2196F3;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-delete {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            background-color: #f44336;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-edit:hover {
+            background-color: #1976D2;
+        }
+
+        .btn-delete:hover {
+            background-color: #d32f2f;
+        }
+
+        /* 版权区域样式 */
+        .footer {
+            margin-top: 30px;
+            padding: 20px 0;
+            background-color: #6b6a6a; /* 灰色背景 */
+            color: white; /* 白色文字 */
+            text-align: center; /* 居中对齐 */
+            font-size: 14px;
+        }
+
+        .footer p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        #container{ 
+            width: 80%;
+            margin: 0 auto;
+        }
+    
+    </style>
+</head>
+<body>
+   <div id ="container">
+     <!-- 顶部导航栏 -->
+    <div class="navbar">
+        <h1>Tlias智能学习辅助系统</h1>
+        <a href="#" class="logout-link">退出登录</a>
+    </div>
+
+    <div class="container">
+        <!-- 搜索表单区域 -->
+        <div class="search-form">
+            <div class="form-group">
+                <label for="name">姓名</label>
+                <input type="text" id="name" name="name" v-model="searchForm.name" placeholder="请输入员工姓名">
+            </div>
+
+            <div class="form-group">
+                <label for="gender">性别</label>
+                <select id="gender" name="gender" v-model="searchForm.gender">
+                    <option value="">请选择</option>
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="position">职位</label>
+                <select id="position" name="position" v-model="searchForm.position">
+                    <option value="">请选择</option>
+                    <option value="1">班主任</option>
+                    <option value="2">讲师</option>
+                    <option value="3">学工主管</option>
+                    <option value="4">教研主管</option>
+                    <option value="5">咨询师</option>
+                </select>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" @:click="search">查询</button>
+                <button type="button" class="btn btn-secondary" @:click="clear">清空</button>
+            </div>
+        </div>
+
+        <!-- 表格展示区域 -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>头像</th>
+                        <th>职位</th>
+                        <th>入职日期</th>
+                        <th>最后操作时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for ="(e,index) in emplist" :key="e.id">
+                        <td>{{index + 1}}</td>
+                        <td>{{e.name}}</td>
+                        <td> {{e.gender == 1 ? "男" : "女" }}</td>
+                        <td><img  :src="e.image" :alt="e.name" class="avatar"></td>
+                        <td >
+                            <!-- v-if和v-else-if的使用  -->
+                            <span v-if="e.position == 1">班主任</span>
+                            <span v-else-if="e.position == 2">讲师</span>
+                            <span v-else-if="e.position == 3">学工主管</span>
+                            <span v-else-if="e.position == 4">教研主管</span>
+                            <span v-else-if="e.position == 5">咨询师</span>
+                            <span v-else>未知职位</span>
+
+                            <!-- /* v-switch的使用 */ -->
+                             <!-- <span v-show="e.position == 1">班主任</span>
+                             <span v-show="e.position == 2">讲师</span>
+                             <span v-show="e.position == 3">学工主管</span>
+                             <span v-show="e.position == 4">教研主管</span>
+                             <span v-show="e.position == 5">咨询师</span>
+                             <span v-show="e.position != 1 && e.position != 2 && e.position != 3 && e.position != 4 && e.position != 5">未知职位</span>-->
+                        </td>
+                        <td >{{e.date}}</td>
+                        <td >{{e.lastOperationTime}}</td>
+                        <td class="operation">
+                            <button type="button" class="btn-edit">编辑</button>
+                            <button type="button" class="btn-delete">删除</button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 页面版权区域 -->
+    <div class="footer">
+        <p>郑州zhy文化有限公司</p>
+        <p>版权所有 2006-2026 All Rights Reserved</p>
+    </div>
+   </div>"
+
+
+   <script type="module">
+        import { createApp } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+
+        createApp({
+            data() {
+                return {
+                    searchForm:{
+                        name: "",
+                        gender: "",
+                        position: ""
+                    },
+
+                    //员工列表数据
+                    emplist: [
+                        {"id": 1,
+                            "name": "令狐冲",
+                            "gender": "1",
+                            "image": "/images/微信图片_20260611231024_59_2.jpg",
+                            "position": "1",
+                            "date": "2023-01-15",
+                            "lastOperationTime": "2023-12-01 14:30"
+                        },
+
+                        {"id": 2,
+                            "name": "任盈盈",
+                            "gender": "1",
+                            "image": "/images/微信图片_20260611231025_60_2.jpg",
+                            "position": "2",
+                            "date": "2023-02-20",
+                            "lastOperationTime": "2023-12-01 15:45"
+                        },
+
+                        {"id": 3,
+                            "name": "岳不群",
+                            "gender": "2",
+                            "image": "/images/微信图片_20260611231028_62_2.jpg",
+                            "position": "3",
+                            "date": "2023-03-10",
+                            "lastOperationTime": "2023-12-01 16:20"
+                        },
+                        // 其他员工数据
+                    ]
+                   
+                
+                }
+            },
+            methods :{
+                search() {
+                    console.log(this.searchForm);
+                },
+                clear() {
+                    this.searchForm = {
+                        name: "",
+                        gender: "",
+                        position: ""
+                    }
+                }
+            }
+        }).mount("#container");
+       
+   </script>
+</body>
+</html>
